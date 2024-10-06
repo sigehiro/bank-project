@@ -1,10 +1,4 @@
-
-
-# balanc
-balance = 1000
-
-def display_main_page():
-    global balance
+def display_main_page(balance):
     print('Entering 1 will display the balance')
     print('Entering 2 will allow making a withdraw')
     print('Entering 3 will allow making a deposit')
@@ -13,20 +7,24 @@ def display_main_page():
     #loop:
     while True:
         choice = input('Enter the number 1 to 4: ')
+        # Check for valid input before going ahead with the operation.
+        if choice not in ['1', '2', '3', '4']:
+            print("Invalid number. Try again\n")
+            continue
 
         if choice == "1":
-            display_balance()
+            balance = display_balance(balance)
         elif choice == "2":
-            make_withdraw()
+            balance = make_withdraw(balance)
         elif choice == "3":
-            make_deposit()
+            balance = make_deposit(balance)
         elif choice == "4":
             exit_program()
             break
         else:
             print("Invalid number. Try again")
 
-        #After each operation,
+        # After each operation,
         # ask the user if user wants to perform another operation
         another_action = input("Would you like to perform another operation? (yes/no): ")
         if another_action != 'yes':
@@ -34,15 +32,16 @@ def display_main_page():
             break
 
 
+# Balance Display
 #残高表示
-def display_balance():
-    global balance
+def display_balance(balance):
     print(f'Your balance is ${balance:.2f}. \n')
+    return balance
 
 
+#Drawer Processing
 #引き出しの処理
-def make_withdraw():
-    global balance
+def make_withdraw(balance):
     print("Choose an amount to withdraw:")
     print("1. $20")
     print("2. $40")
@@ -55,23 +54,26 @@ def make_withdraw():
     if choice in ['1', '2', '3', '4', '5']:
         options_withdraw = [20, 40, 60, 80, 100]
         amount = options_withdraw[int(choice) - 1]
-        withdraw(amount)
-        
-
+        return withdraw(balance, amount)
     elif choice == '6':
         try:
             amount = float(input("What is amount of money to be withdrawn: "))
-            withdraw(amount)
+            # Check for valid input before going ahead with the operation.
+            if amount < 0:
+                print("Invalid number. Please enter a positive number.\n")
+                return balance
+            return withdraw(balance, amount)
 
         # except number
         except ValueError:
             print("Invalid input. Please enter a numeric value\n")
-
+            return balance
     else:
         print("Invalid choice. Please try again.\n")
+        return balance
 
-def withdraw(amount):
-    global balance
+
+def withdraw(balance, amount):
     if amount < 0:
         print("Invalid number. Please enter a positive number\n")
     elif amount > balance:
@@ -79,16 +81,29 @@ def withdraw(amount):
     else:
         balance -= amount
         print(f'Your balance is ${balance:.2f} \n')
+    return balance
 
 
+#Deposit Processing
 #入金処理
-def make_deposit():
-    print("入金を行います")
+def make_deposit(balance):
+    try:
+        amount = float(input("What is amount of money to be deposit: "))
+        if amount < 0:
+            print("Invalid amount, please enter an amount greater than or equal to 0.\n")
+            return balance
 
-# プログラム終了
+        balance += amount
+        print(f'Your balance is  ${balance:.2f} \n')
+
+    except ValueError:
+        print("Invalid input. Please enter a numeric value\n")
+    return balance
+
+
+# Exit Program
 def exit_program():
-    print("プログラムを終了します。")
-
+    print("Exit Program")
 
 if __name__ == "__main__":
     display_main_page()
