@@ -1,6 +1,6 @@
 
 
-# balance
+# balanc
 balance = 1000
 
 def display_main_page():
@@ -26,6 +26,12 @@ def display_main_page():
         else:
             print("Invalid number. Try again")
 
+        #After each operation,
+        # ask the user if user wants to perform another operation
+        another_action = input("Would you like to perform another operation? (yes/no): ")
+        if another_action != 'yes':
+            exit_program()
+            break
 
 
 #残高表示
